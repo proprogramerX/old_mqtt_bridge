@@ -2,7 +2,7 @@ mqtt:
   client:
     protocol: 4      # MQTTv311
   connection:
-    host: localhost
+    host: 10.255.253.29
     port: 1883
     keepalive: 60
   private_path: device/001
@@ -11,22 +11,49 @@ mqtt:
 bridge:
   # ping pong
   - factory: mqtt_bridge.bridge:RosToMqttBridge
-    msg_type: std_msgs.msg:Bool
-    topic_from: /ping
-    topic_to: ping
+    msg_type: nav_msgs.msg:Odometry
+    topic_from: /state_estimation
+    topic_to: ugv1
   - factory: mqtt_bridge.bridge:MqttToRosBridge
-    msg_type: std_msgs.msg:Bool
-    topic_from: ping
+    msg_type: nav_msgs.msg:Odometry
+    topic_from: ugv2
     topic_to: /pong
   # echo back
   - factory: mqtt_bridge.bridge:RosToMqttBridge
-    msg_type: std_msgs.msg:String
-    topic_from: /echo
-    topic_to: echo
+    msg_type: std_msgs.msg:Int32MultiArray
+    topic_from: /sensor_coverage_planner/covered_subspaces
+    topic_to: coveredsubspace1
   - factory: mqtt_bridge.bridge:MqttToRosBridge
-    msg_type: std_msgs.msg:String
-    topic_from: echo
-    topic_to: /back
+    msg_type: std_msgs.msg:Int32MultiArray
+    topic_from: coveredsubspace2
+    topic_to: /covered_subspaces_2
+    # echo back
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:Int32MultiArray
+    topic_from: /sensor_coverage_planner/ugv_exploring_subspaces
+    topic_to: exploringsubspace1
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:Int32MultiArray
+    topic_from: exploringsubspace2
+    topic_to: /exploring_subspaces_2
+    # echo back
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:Int32
+    topic_from: /sensor_coverage_planner/priority
+    topic_to: ugv1priority
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:Int32
+    topic_from: ugv2priority
+    topic_to: /ugv2priority
+    # echo back
+  - factory: mqtt_bridge.bridge:RosToMqttBridge
+    msg_type: std_msgs.msg:Int32
+    topic_from: /sensor_coverage_planner/redflag
+    topic_to: ugv1redflag
+  - factory: mqtt_bridge.bridge:MqttToRosBridge
+    msg_type: std_msgs.msg:Int32
+    topic_from: ugv2redflag
+    topic_to: /ugv2redflag
   # private path
   - factory: mqtt_bridge.bridge:RosToMqttBridge
     msg_type: std_msgs.msg:String

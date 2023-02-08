@@ -28,7 +28,7 @@ def mqtt_bridge_node():
     # load parameters
     params = rospy.get_param("~", {})
     mqtt_params = params.pop("mqtt", {})
-    conn_params = mqtt_params.pop("connection")
+    conn_params = mqtt_params.pop("connection",{})
     mqtt_private_path = mqtt_params.pop("private_path", "")
     bridge_params = params.get("bridge", [])
 
